@@ -13,6 +13,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Arrays;
 
 /**
  * Created by JasonYang on 2016/3/11.
@@ -149,7 +150,11 @@ public class Permissions extends CordovaPlugin {
                     return;
                 }
             }
-            cordova.requestPermissions(this, REQUEST_CODE_ENABLE_PERMISSION, permissionArray);
+            if (android.os.Build.VERSION.SDK_INT <= 30 && Arrays.asList(permissionArray).contains("android.permission.BLUETOOTH_CONNECT")) {
+                cordova.requestPermissions(this, REQUEST_CODE_ENABLE_PERMISSION, new String[]{"android.permission.BLUETOOTH", "android.permission.BLUETOOTH_ADMIN"});
+            } else {
+                cordova.requestPermissions(this, REQUEST_CODE_ENABLE_PERMISSION, permissionArray);
+            }
         }
     }
 
